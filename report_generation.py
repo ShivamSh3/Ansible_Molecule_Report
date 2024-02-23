@@ -2,20 +2,18 @@
 import re
 import os
 import json
+from flask import Flask, render_template, jsonify
 
-directory = "../log"
-pattern = r"PLAY RECAP.*\n(.*)"
+directory = "/root/log/"
+pattern = re.compile(r"PLAY RECAP.*\n(.*)", re.MULTILINE)
+app = Flask(__name__, template_folder='templates')
+result = {}
 
 def get_all_log_files(directory):
-    file_list = []
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            file_path = os.path.join(root, file)
-            file_list.append(file_path)
-    return file_list
+    return [os.path.join(root, file) for root, dirs, files in os.walk(directory) for file in files]
 
-def check_playbook_failures(data):
-    playbook_recap_match = re.findall(pattern, data, re.MULTILINE)
+def check_playbook_failures(data, pattern):
+    playbook_recap_match = pattern.findall(data)
     if playbook_recap_match:
         for match in playbook_recap_match:
             failed_match = re.search(r"failed=(\d+)", match)
@@ -33,8 +31,12 @@ def simplify_output(file_path):
     scenario_name = scenario_name.replace('.log', '')
     return role_name, scenario_name
 
+@app.route('/')
+def index():
+    global result
+    return render_template('index.html', result=result)
+
 if __name__ == '__main__':
-    result = {}
     pass_result = 0
     fail_result = 0
     passed_role = set()
@@ -45,12 +47,9 @@ if __name__ == '__main__':
     for file_path in file_list:
         with open(file_path, "r") as f:
             content = f.read()
-            report = check_playbook_failures(content)
+            report = check_playbook_failures(content, pattern)
             role_name, scenario_name = simplify_output(file_path)
-            if role_name not in result:
-                result[role_name] = {scenario_name: report}
-            else:
-                result[role_name][scenario_name] = report
+            result.setdefault(role_name, {})[scenario_name] = report
             if report == 'PASS':
                 pass_result += 1
             else:
@@ -60,3 +59,5 @@ if __name__ == '__main__':
     print('Pass: ', pass_result)
     print('Fail: ', fail_result)
     print('Pass Percentage: ', round(pass_result / (pass_result + fail_result) * 100, 2),'%')
+
+    app.run(port=5000)

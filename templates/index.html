@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>result Table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            /* padding: 8px; */
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th style="width: 70%;">Scenario</th>
+            <th>Status</th>
+        </tr>
+        {% for role, scenario in result.items() %}
+        <tr>
+            <th style="width: 70%;">{{ role | upper }}</th>
+            
+            <table>
+                {% for each_scenario, each_value in scenario.items() %}
+                <tr>
+                    <td style="width: 70%;">{{ each_scenario }}</td>
+                    {% if each_value == "PASS" %}
+                    <td style="color: #99f799;">{{ each_value }}</td>
+                    {% else %}
+                    <td style="color: #FF0000;">{{ each_value }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </table>&nbsp;
+        </tr><br/>
+        {% endfor %}
+    </table>
+</body>
+</html>
