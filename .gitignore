@@ -5,6 +5,7 @@ __pycache__/
 
 log/
 *.log
+nohup.out
 
 # C extensions
 *.so

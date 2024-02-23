@@ -4,7 +4,7 @@ import os
 import json
 from flask import Flask, render_template, jsonify
 
-directory = "/root/log/"
+directory = os.path.dirname(os.path.abspath(__file__)) + '/log/'
 pattern = re.compile(r"PLAY RECAP.*\n(.*)", re.MULTILINE)
 app = Flask(__name__, template_folder='templates')
 result = {}
