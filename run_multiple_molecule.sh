@@ -24,3 +24,5 @@ do
         fi
     done
 done
+
+python report_generation.py
