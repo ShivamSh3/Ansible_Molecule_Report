@@ -4,7 +4,6 @@ import os
 import json
 import smtplib
 from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 from jinja2 import Environment, FileSystemLoader
@@ -73,33 +72,6 @@ def send_email(output_file_path, recipient_email):
         attachment.add_header('Content-Disposition', f'attachment; filename="{os.path.basename(output_file_path)}"')
         msg.attach(attachment)
         print("Attachments added")
-
-    # Attach the summary to the email body
-    summary = f"""
-    <html>
-    <BODY>
-        <H1 align="center">Automated Molecule Execution Report</H1>
-        <H3>Summary:</H3>
-    </BODY>
-    <body>
-        <table border="2" font size="3" face="Arial">
-        <tr>
-            <th>Total Test Cases</th>
-            <th>Passed</th>
-            <th>Failed</th>
-            <th>Pass Percentage</th>
-        </tr>
-        <tr>
-            <td>{ total_test_cases }</td>
-            <td>{ passed_test_cases }</td>
-            <td>{ failed_test_cases }</td>
-            <td>{ pass_percentage }%</td>
-        </tr>
-    </table>
-    </body>
-    </html>
-    """
-    msg.attach(MIMEText(summary, 'html'))
 
     # Send the email
     with smtplib.SMTP(smtp_server) as server:
