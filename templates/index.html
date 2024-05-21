@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>result Table</title>
+    <title>Result Table</title>
+    <BODY>
+        <H1 align="center">Automated Molecule Execution Report</H1>
+        <H3>Summary:</H3>
+    </BODY>
     <style>
         table {
             border-collapse: collapse;
@@ -15,31 +19,73 @@
             background-color: #f2f2f2;
             white-space: nowrap;
         }
+        th, td {
+            padding: 8px;
+        }
+        th:first-child, td:first-child {
+            border-right: 1px solid #ddd;
+        }
+        .summary-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .summary-table th, .summary-table td {
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .summary-table th {
+            background-color: #f2f2f2;
+            white-space: nowrap;
+        }
+        .summary-table th, .summary-table td {
+            padding: 8px;
+        }
+        .summary-table th:first-child, .summary-table td:first-child {
+            border-right: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
-    <table>
+    <table class="summary-table">
+        <table border="2" font size="3" face="Arial">
         <tr>
-            <th style="width: 70%;">Scenario</th>
-            <th>Status</th>
+            <th>Total Test Cases</th>
+            <th>Passed</th>
+            <th>Failed</th>
+            <th>Pass Percentage</th>
+        </tr>
+        <tr>
+            <td>{{ total_test_cases }}</td>
+            <td>{{ passed_test_cases }}</td>
+            <td>{{ failed_test_cases }}</td>
+            <td>{{ pass_percentage }}%</td>
+        </tr>
+    </table>
+    <hr/>
+    <table>
+        <H3>Scenario Wise Report:</H3>
+        <table border="2" font size="3" face="Arial">
+        <tr>
+            <th colspan="2" style="width: 100%;">Role</th>
+        </tr>
+        <tr>
+            <th style="width: 50%;">Scenarios</th>
+            <th>Execution Status</th>
         </tr>
         {% for role, scenario in result.items() %}
         <tr>
-            <th style="width: 70%;">{{ role | upper }}</th>
-            
-            <table>
-                {% for each_scenario, each_value in scenario.items() %}
-                <tr>
-                    <td style="width: 70%;">{{ each_scenario }}</td>
-                    {% if each_value == "PASS" %}
-                    <td style="color: #99f799;">{{ each_value }}</td>
-                    {% else %}
-                    <td style="color: #FF0000;">{{ each_value }}</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </table>&nbsp;
-        </tr><br/>
+            <th colspan="2" style="width: 100%;">{{ role | upper }}</th>
+        </tr>
+        {% for each_scenario, each_value in scenario.items() %}
+        <tr>
+            <td style="width: 50%;">{{ each_scenario }}</td>
+            {% if each_value == "PASS" %}
+            <td style="color: #99f799;">{{ each_value }}</td>
+            {% else %}
+            <td style="color: #FF0000;">{{ each_value }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
         {% endfor %}
     </table>
 </body>
