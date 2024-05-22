@@ -1,6 +1,6 @@
 #!/bin/sh
 # This shell script run each scenario in molecule directory and store log in log directory
-REGEX_PATTERN="sensor"
+REGEX_PATTERN=""
 REPO_BASE_PATH="/root/collections/ansible_collections/dellemc/openmanage"
 BASE_CONFIG="/root/collections/ansible_collections/dellemc/openmanage/roles/molecule.yml"
 ENV_FILE_PATH="/root/.env.yml"

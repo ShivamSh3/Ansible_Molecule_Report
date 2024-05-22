@@ -95,17 +95,20 @@ if __name__ == '__main__':
             else:
                 failed_test_cases += 1
 
-    pass_percentage = round(passed_test_cases / (passed_test_cases + failed_test_cases) * 100, 2)
-    html_output = generate_html_output(result, passed_test_cases, failed_test_cases, pass_percentage)
-    with open('report.html', 'w') as f:
-        print('Generating report...')
-        f.write(html_output)
-        print('Report generated successfully!')
+    if (passed_test_cases + failed_test_cases) > 0:
+        pass_percentage = round(passed_test_cases / (passed_test_cases + failed_test_cases) * 100, 2)
+        html_output = generate_html_output(result, passed_test_cases, failed_test_cases, pass_percentage)
+        with open('report.html', 'w') as f:
+            print('Generating report...')
+            f.write(html_output)
+            print('Report generated successfully!')
 
-    print('Summary of test results:')
-    print('Total scenario: ', total_test_cases)
-    print('Pass: ', passed_test_cases)
-    print('Fail: ', failed_test_cases)
-    print('Pass Percentage: ', pass_percentage,'%')
-    recipient = config['recipient']
-    send_email('report.html', recipient)
+        print('Summary of test results:')
+        print('Total scenario: ', total_test_cases)
+        print('Pass: ', passed_test_cases)
+        print('Fail: ', failed_test_cases)
+        print('Pass Percentage: ', pass_percentage,'%')
+        recipient = config['recipient']
+        send_email('report.html', recipient)
+    else:
+        print('No test log found.')
