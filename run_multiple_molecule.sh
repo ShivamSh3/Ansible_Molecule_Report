@@ -30,9 +30,9 @@ do
         scenariofullpath="${scenario%/*}"
         each_scenario="${scenariofullpath##*/}"
         absolutelogpath="$LOGPATH$ROLENAME-$each_scenario.log"
-        if [[ -z "$REGEX_PATTERN" ]] || echo "$absolutelogpath" | grep -q $REGEX_PATTERN; then
+        if [[ -z $REGEX_PATTERN ]] || [[ $absolutelogpath =~ $REGEX_PATTERN ]]; then
             echo "Running command: molecule -vvv -e $ENV_FILE_PATH --base-config $BASE_CONFIG test -s $each_scenario > $absolutelogpath";
-            (cd "$scenariopath" && molecule -vvv -e $ENV_FILE_PATH --base-config $BASE_CONFIG test -s $each_scenario > $absolutelogpath);
+            (cd "$scenariopath" && molecule -vvv -e "$ENV_FILE_PATH" --base-config "$BASE_CONFIG" test -s "$each_scenario" > "$absolutelogpath");
         fi
     done
 done
